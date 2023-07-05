@@ -78,6 +78,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
         al.add(question9);
         al.add(question10);
 
+
         Collections.shuffle(al);
         // Select the first 6 questions
         randomQuestions = new ArrayList<>(al.subList(0, 6));

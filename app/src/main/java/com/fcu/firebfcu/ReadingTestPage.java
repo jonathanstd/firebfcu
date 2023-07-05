@@ -229,6 +229,7 @@ public class ReadingTestPage extends AppCompatActivity {
             if (randomQuestions.get(index).getAnswer() == 'A' && !ansChecked) {
                 totalPoint += 2;
                 ansChecked = true;
+
             }
             // Handle the click event here
             Toast toast = Toast.makeText(getApplicationContext(), "A", Toast.LENGTH_SHORT);
