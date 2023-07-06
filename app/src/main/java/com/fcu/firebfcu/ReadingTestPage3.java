@@ -32,7 +32,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
     char band = 'a';
     String chapterPath = "rd-" + band + '-' + chapterNumber + '/' ;
     //private ImageView questionImageView;
-    TextView qNumber2;
+    TextView qNumber3;
     TextView txtView;
     ImageView imgView;
     ArrayList<QModel3> randomQuestions;
@@ -56,7 +56,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
         RadioButton ansButton2 = findViewById(R.id.ansButton2);
         RadioButton ansButton3 = findViewById(R.id.ansButton3);
         ansGroup = findViewById(R.id.radioGroup);
-        qNumber2 = findViewById(R.id.qNumber3);
+        qNumber3 = findViewById(R.id.qNumber3);
 
 
 
@@ -84,7 +84,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
         al.add(question10);
 
         txtView.setText(randomQuestions.get(0).getqText());
-        qNumber2.setText("第 1 題");
+        qNumber3.setText("第 1 題");
 
         Collections.shuffle(al);
         // Select the first 6 questions
@@ -114,7 +114,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
                         exception.printStackTrace();
                     });
                     ansChecked = false;
-                    qNumber2.setText("第 " + (index + 1) + " 題");
+                    qNumber3.setText("第 " + (index + 1) + " 題");
 
                     ansButton1.setText(currentQuestion.getAns1());
                     ansButton2.setText(currentQuestion.getAns2());
@@ -151,7 +151,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
                     exception.printStackTrace();
                 });
                 ansChecked = false;
-                qNumber2.setText("第 " + (index + 1) + " 題");
+                qNumber3.setText("第 " + (index + 1) + " 題");
 
                 ansButton1.setText(currentQuestion.getAns1());
                 ansButton2.setText(currentQuestion.getAns2());
@@ -229,7 +229,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
 
         if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
             index = questionIndex;
-            qNumber2.setText("第 " + (index + 1) + " 題");
+            qNumber3.setText("第 " + (index + 1) + " 題");
 
             StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
             imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
