@@ -44,4 +44,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_qmodel">QModel</string>
+    <string name="title_activity_reading_test_page3">ReadingTestPage3</string>
 </resources>
