@@ -151,7 +151,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
             }
 
             if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage2.this, TotalPointPage.class);
+                Intent intent = new Intent(ReadingTestPage2.this, ReadingTestPage3.class);
                 intent.putExtra("totalPoint", totalPoint);
                 startActivity(intent);
             } else {
