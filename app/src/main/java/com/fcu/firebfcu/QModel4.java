@@ -11,11 +11,48 @@ public class QModel4 {
     String ans2;
 
     String ans3;
+    String ans4;
+
+    public String getAns4() {
+        return ans4;
+    }
+
+    public void setAns4(String ans4) {
+        this.ans4 = ans4;
+    }
+
+    public String getAns5() {
+        return ans5;
+    }
+
+    public void setAns5(String ans5) {
+        this.ans5 = ans5;
+    }
+
+    public String getAns6() {
+        return ans6;
+    }
+
+    public void setAns6(String ans6) {
+        this.ans6 = ans6;
+    }
+
+    String ans5;
+
+    String ans6;
 
     char answer;
 
-    public QModel4(String qText1, String qText2, String ans1, String ans2, String ans3, char answer) {
-        this.qText1 = qText1; this.qText2 = qText2; this.ans1 = ans1; this.ans2 = ans2; this.ans3 = ans3; this.answer = answer; }
+    public QModel4(String qText1, String qText2, String ans1, String ans2, String ans3,String ans4, String ans5, String ans6, char answer) {
+        this.qText1 = qText1;
+        this.qText2 = qText2;
+        this.ans1 = ans1;
+        this.ans2 = ans2;
+        this.ans3 = ans3;
+        this.ans4 = ans4;
+        this.ans5 = ans5;
+        this.ans6 = ans6;
+        this.answer = answer; }
 
     public String getqText1() {
         return qText1;

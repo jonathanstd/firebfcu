@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class ReadingTestPage3 extends AppCompatActivity {
     char band = 'a';
     String chapterPath = "rd-" + band + '-' + chapterNumber + '/' ;
     //private ImageView questionImageView;
+    ScrollView scrollView3;
+    LinearLayout buttonLayout3;
     TextView qNumber3;
     TextView txtView;
     ImageView imgView;
@@ -47,14 +51,18 @@ public class ReadingTestPage3 extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-
-        Button btnNext2 = findViewById(R.id.btnNext2);
-        Button btnPrev2 = findViewById(R.id.btnPrev2);
+        scrollView3 = findViewById(R.id.scrollView3);
+        buttonLayout3 = findViewById(R.id.buttonLayout3);
+        Button btnNext3 = findViewById(R.id.btnNext3);
+        Button btnPrev3 = findViewById(R.id.btnPrev3);
         imgView = findViewById(R.id.imgView);
         txtView = findViewById(R.id.qText);
-        RadioButton ansButton1 = findViewById(R.id.ansButton1);
-        RadioButton ansButton2 = findViewById(R.id.ansButton2);
-        RadioButton ansButton3 = findViewById(R.id.ansButton3);
+        RadioButton ansButton13 = findViewById(R.id.ansButton13);
+        RadioButton ansButton23 = findViewById(R.id.ansButton23);
+        RadioButton ansButton33 = findViewById(R.id.ansButton33);
+
+
+
         ansGroup = findViewById(R.id.radioGroup);
         qNumber3 = findViewById(R.id.qNumber3);
 
@@ -69,9 +77,10 @@ public class ReadingTestPage3 extends AppCompatActivity {
         QModel3 question7 = new QModel3("a13032","大家都 ____她慶祝。","幫","讓","對",'A');
         QModel3 question8 = new QModel3("a13032","她 ____到很多禮物。 ","收","寄","借",'A');
         QModel3 question9 = new QModel3("a13032","所以，她今天非常____。 ","熱鬧","舒服","高興",'C');
-        QModel3 question10 = new QModel3("a120a1303225","希望明年能 ____德國去玩。 ","到","去","來",'A');
+        QModel3 question10 = new QModel3("a13032","希望明年能 ____德國去玩。 ","到","去","來",'A');
 
         ArrayList<QModel3> al = new ArrayList<QModel3>();
+
         al.add(question1);
         al.add(question2);
         al.add(question3);
@@ -83,19 +92,37 @@ public class ReadingTestPage3 extends AppCompatActivity {
         al.add(question9);
         al.add(question10);
 
-        txtView.setText(randomQuestions.get(0).getqText());
-        qNumber3.setText("第 1 題");
+        List<QModel3> group1 = new ArrayList<>(al.subList(0, 5));
+        List<QModel3> group2 = new ArrayList<>(al.subList(5, 10));
 
-        Collections.shuffle(al);
-        // Select the first 6 questions
-        randomQuestions = new ArrayList<>(al.subList(0, 15));
+// Shuffle the order of the groups
+        List<List<QModel3>> groups = new ArrayList<>();
+        groups.add(group1);
+        groups.add(group2);
+        Collections.shuffle(groups);
+
+// Concatenate the shuffled groups into randomQuestions
+        randomQuestions = new ArrayList<>();
+        for (List<QModel3> group : groups) {
+            randomQuestions.addAll(group);
+        }
+
         int lastIndex = randomQuestions.size() - 1;
 
         //loadImage(al.get(index).getqImage());
 
-        String imagePath = al.get(index).getqImage();
+        //String imagePath = al.get(index).getqImage();
 
-        btnPrev2.setOnClickListener(new View.OnClickListener() {
+        txtView.setText(randomQuestions.get(0).getqText());
+        qNumber3.setText("第 1 題");
+
+        QModel3 firstQuestion = randomQuestions.get(0);
+
+        ansButton13.setText(firstQuestion.getAns1());
+        ansButton23.setText(firstQuestion.getAns2());
+        ansButton33.setText(firstQuestion.getAns3());
+
+        btnPrev3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (index > 0) {
@@ -104,7 +131,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
                     }
 
                     index--;
-
+                    txtView.setText(randomQuestions.get(index).getqText());
                     QModel3 currentQuestion = randomQuestions.get(index);
                     StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
                     imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -116,9 +143,9 @@ public class ReadingTestPage3 extends AppCompatActivity {
                     ansChecked = false;
                     qNumber3.setText("第 " + (index + 1) + " 題");
 
-                    ansButton1.setText(currentQuestion.getAns1());
-                    ansButton2.setText(currentQuestion.getAns2());
-                    ansButton3.setText(currentQuestion.getAns3());
+                    ansButton13.setText(currentQuestion.getAns1());
+                    ansButton23.setText(currentQuestion.getAns2());
+                    ansButton33.setText(currentQuestion.getAns3());
                 } else {
                     // Navigate to the last question in ReadingTestPage
                     Intent intent = new Intent(ReadingTestPage3.this, ReadingTestPage2.class);
@@ -130,13 +157,13 @@ public class ReadingTestPage3 extends AppCompatActivity {
         });
 
 
-        btnNext2.setOnClickListener(v -> {
+        btnNext3.setOnClickListener(v -> {
             if (!ansChecked) {
                 ansGroup.clearCheck();
             }
 
             if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage3.this, TotalPointPage.class);
+                Intent intent = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
                 intent.putExtra("totalPoint", totalPoint);
                 startActivity(intent);
             } else {
@@ -153,13 +180,13 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 ansChecked = false;
                 qNumber3.setText("第 " + (index + 1) + " 題");
 
-                ansButton1.setText(currentQuestion.getAns1());
-                ansButton2.setText(currentQuestion.getAns2());
-                ansButton3.setText(currentQuestion.getAns3());
+                ansButton13.setText(currentQuestion.getAns1());
+                ansButton23.setText(currentQuestion.getAns2());
+                ansButton33.setText(currentQuestion.getAns3());
             }
         });
 
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= 10; i++) {
             int questionNumber = i;
             Button button = new Button(this);
             button.setText(String.valueOf(questionNumber));
@@ -170,11 +197,11 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 }
             });
             // Add the button to the LinearLayout
-            LinearLayout linearLayout = findViewById(R.id.buttonLayout);
+            LinearLayout linearLayout = findViewById(R.id.buttonLayout3);
             linearLayout.addView(button);
         }
 
-        ansButton1.setOnClickListener(v -> {
+        ansButton13.setOnClickListener(v -> {
             if (randomQuestions.get(index).getAnswer() == 'A' && !ansChecked) {
                 totalPoint += 2;
                 ansChecked = true;
@@ -190,7 +217,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
             }, 300);  // Set a custom delay of 1000 milliseconds (1 second)
         });
 
-        ansButton2.setOnClickListener(v -> {
+        ansButton23.setOnClickListener(v -> {
             if (randomQuestions.get(index).getAnswer() == 'B' && !ansChecked) {
                 totalPoint += 2;
                 ansChecked = true;
@@ -206,7 +233,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
             }, 300);  // Set a custom delay of 2000 milliseconds (2 seconds)
         });
 
-        ansButton3.setOnClickListener(v -> {
+        ansButton33.setOnClickListener(v -> {
             if (randomQuestions.get(index).getAnswer() == 'C' && !ansChecked) {
                 totalPoint += 2;
                 ansChecked = true;

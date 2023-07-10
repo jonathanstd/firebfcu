@@ -53,6 +53,9 @@ public class ReadingTestPage2 extends AppCompatActivity {
         RadioButton ansButton1 = findViewById(R.id.ansButton1);
         RadioButton ansButton2 = findViewById(R.id.ansButton2);
         RadioButton ansButton3 = findViewById(R.id.ansButton3);
+
+
+
         ansGroup = findViewById(R.id.radioGroup);
         qNumber2 = findViewById(R.id.qNumber2);
         qNumber2.setText("第 1 題");
@@ -104,11 +107,16 @@ public class ReadingTestPage2 extends AppCompatActivity {
         Collections.shuffle(al);
         // Select the first 6 questions
         randomQuestions = new ArrayList<>(al.subList(0, 15));
-        int lastIndex = randomQuestions.size() - 1;
+        int lastIndexPage2 = randomQuestions.size() - 1;
+
+        QModel2 firstQuestion = randomQuestions.get(0);
+        ansButton1.setText(firstQuestion.getAns1());
+        ansButton2.setText(firstQuestion.getAns2());
+        ansButton3.setText(firstQuestion.getAns3());
 
         //loadImage(al.get(index).getqImage());
 
-        String imagePath = al.get(index).getqImage();
+        //String imagePath = al.get(index).getqImage();
 
         btnPrev2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,31 +153,34 @@ public class ReadingTestPage2 extends AppCompatActivity {
         });
 
 
-        btnNext2.setOnClickListener(v -> {
-            if (!ansChecked) {
-                ansGroup.clearCheck();
-            }
+        btnNext2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!ansChecked) {
+                    ansGroup.clearCheck();
+                }
 
-            if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage2.this, ReadingTestPage3.class);
-                intent.putExtra("totalPoint", totalPoint);
-                startActivity(intent);
-            } else {
-                index++;
-                QModel2 currentQuestion = randomQuestions.get(index);
-                StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
-                imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Picasso.get().load(uri.toString()).into(imgView);
-                }).addOnFailureListener(exception -> {
-                    // Handle any errors that occurred during image download
-                    exception.printStackTrace();
-                });
-                ansChecked = false;
-                qNumber2.setText("第 " + (index + 1) + " 題");
+                if (index == lastIndexPage2) {
+                    Intent intent = new Intent(ReadingTestPage2.this, ReadingTestPage3.class);
+                    //intent.putExtra("lastQuestion", true);
+                    startActivity(intent);
+                } else {
+                    index++;
+                    QModel2 currentQuestion = randomQuestions.get(index);
+                    StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+                    imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Picasso.get().load(uri.toString()).into(imgView);
+                    }).addOnFailureListener(exception -> {
+                        // Handle any errors that occurred during image download
+                        exception.printStackTrace();
+                    });
+                    ansChecked = false;
+                    qNumber2.setText("第 " + (index + 1) + " 題");
 
-                ansButton1.setText(currentQuestion.getAns1());
-                ansButton2.setText(currentQuestion.getAns2());
-                ansButton3.setText(currentQuestion.getAns3());
+                    ansButton1.setText(currentQuestion.getAns1());
+                    ansButton2.setText(currentQuestion.getAns2());
+                    ansButton3.setText(currentQuestion.getAns3());
+                }
             }
         });
 

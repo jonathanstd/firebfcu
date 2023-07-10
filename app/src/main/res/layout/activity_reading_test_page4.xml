@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReadingTestPage3">
+    tools:context=".ReadingTestPage4">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,44 +14,64 @@
         tools:layout_editor_absoluteY="1dp">
 
         <TextView
-            android:id="@+id/qNumber3"
+            android:id="@+id/qNumber4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/imgView"
+        <TextView
+            android:id="@+id/qText14"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="25sp" />
 
         <TextView
-            android:id="@+id/qText"
+            android:id="@+id/qText24"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="25sp" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/radioGroup4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/ansButton13"
+                android:id="@+id/ansButton14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RadioButton" />
 
             <RadioButton
-                android:id="@+id/ansButton23"
+                android:id="@+id/ansButton24"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RadioButton" />
 
             <RadioButton
-                android:id="@+id/ansButton33"
+                android:id="@+id/ansButton34"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+
+            <RadioButton
+                android:id="@+id/ansButton44"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+
+            <RadioButton
+                android:id="@+id/ansButton54"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+
+            <RadioButton
+                android:id="@+id/ansButton64"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RadioButton" />
@@ -64,13 +84,13 @@
             android:gravity="center_horizontal">
 
             <Button
-                android:id="@+id/btnPrev3"
+                android:id="@+id/btnPrev4"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="上題" />
 
             <Button
-                android:id="@+id/btnNext3"
+                android:id="@+id/btnNext4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="下題" />
@@ -84,12 +104,12 @@
 
 
             <ScrollView
-                android:id="@+id/scrollView3"
+                android:id="@+id/scrollView4"
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
 
                 <LinearLayout
-                    android:id="@+id/buttonLayout3"
+                    android:id="@+id/buttonLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />

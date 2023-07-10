@@ -28,7 +28,6 @@ public class ReadingTestPage extends AppCompatActivity {
     int chapterNumber = 1;
     char band = 'a';
     String chapterPath = "rd-" + band + '-' + chapterNumber + '/';
-
     ScrollView scrollView;
     LinearLayout buttonLayout;
     TextView questionTextView;
