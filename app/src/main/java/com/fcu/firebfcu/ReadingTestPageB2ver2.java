@@ -53,8 +53,8 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
 
 
-        Button btnNextPageB2_2 = findViewById(R.id.btnNextPageB2_2);
-        Button btnPrevPageB2_2 = findViewById(R.id.btnPrevPageB2_2);
+        Button btnNextPageB22_2 = findViewById(R.id.btnNextPageB22_2);
+        Button btnPrevPageB22_2 = findViewById(R.id.btnPrevPageB22_2);
         questionImage = findViewById(R.id.questionImage);
 
         ansButtonPageB22_1 = findViewById(R.id.ansButtonPageB22_1);
@@ -70,6 +70,8 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
 
         radioGroupB22_2 = findViewById(R.id.radioGroupB22_2);
         questionNumberB22_2 = findViewById(R.id.questionNumberB22_2);
+        questionTextPageB2_2 = findViewById(R.id.questionTextPageB22_2);
+
         questionNumberB22_2.setText("第 1 題");
 
         QModelB2_2 question1 = new QModelB2_2("b12024","關於這四個廣告，下面哪一個是對的？","這四個廣告都是賣電腦的","小陳賣的電腦用了一年了","李小姐的電腦要賣 9500 元","早上九點可以打電話給小陳",'B');
@@ -88,9 +90,9 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
         al.add(question6);
 
 
-        Collections.shuffle(al);
+        //Collections.shuffle(al);
         // Select the first 6 questions
-        randomQuestions = new ArrayList<>(al.subList(0, 15));
+        randomQuestions = new ArrayList<>(al.subList(0, 6));
         int lastIndexPage2 = randomQuestions.size() - 1;
 
         QModelB2_2 firstQuestion = randomQuestions.get(0);
@@ -110,7 +112,9 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
 
         //String imagePath = al.get(index).getqImage();
 
-        btnPrevPageB2_2.setOnClickListener(new View.OnClickListener() {
+        questionTextPageB2_2.setText(firstQuestion.getQuestionText());
+
+        btnPrevPageB22_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (index > 0) {
@@ -131,6 +135,8 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
                     ansChecked = false;
                     questionNumberB22_2.setText("第 " + (index + 1) + " 題");
 
+                    questionTextPageB2_2.setText(firstQuestion.getQuestionText());
+
                     ansButtonPageB22_1.setText(firstQuestion.getChoice1());
                     ansButtonPageB22_2.setText(firstQuestion.getChoice2());
                     ansButtonPageB22_3.setText(firstQuestion.getChoice3());
@@ -138,7 +144,7 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
                 } else {
                     // Navigate to the last question in ReadingTestPage
                     Intent intent = new Intent(ReadingTestPageB2ver2.this, ReadingTestPageB2.class);
-                    intent.putExtra("questionNumber", 15);
+                    intent.putExtra("questionNumber", 5);
                     startActivity(intent);
                 }
 
@@ -146,7 +152,7 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
         });
 
 
-        btnNextPageB2_2.setOnClickListener(new View.OnClickListener() {
+        btnNextPageB22_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!ansChecked) {
@@ -169,6 +175,8 @@ public class ReadingTestPageB2ver2 extends AppCompatActivity {
                     });
                     ansChecked = false;
                     questionNumberB22_2.setText("第 " + (index + 1) + " 題");
+
+                    questionTextPageB2_2.setText(firstQuestion.getQuestionText());
 
                     ansButtonPageB22_1.setText(firstQuestion.getChoice1());
                     ansButtonPageB22_2.setText(firstQuestion.getChoice2());

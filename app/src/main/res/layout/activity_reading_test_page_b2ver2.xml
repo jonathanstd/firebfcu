@@ -70,13 +70,13 @@
             android:gravity="center_horizontal">
 
             <Button
-                android:id="@+id/btnPrevPageB2_2"
+                android:id="@+id/btnPrevPageB22_2"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="上題" />
 
             <Button
-                android:id="@+id/btnNextPageB2_2"
+                android:id="@+id/btnNextPageB22_2"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="下題" />
@@ -90,7 +90,7 @@
 
 
             <Button
-                android:id="@+id/menuButtonB2_2"
+                android:id="@+id/menuButtonB22_2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
