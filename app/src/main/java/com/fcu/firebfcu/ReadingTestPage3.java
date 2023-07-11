@@ -42,6 +42,9 @@ public class ReadingTestPage3 extends AppCompatActivity {
     ArrayList<QModel3> randomQuestions;
     RadioGroup ansGroup;
     List<Character> selectedAnswers = new ArrayList<>();
+    RadioButton ansButton13;
+    RadioButton ansButton23;
+    RadioButton ansButton33;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +60,12 @@ public class ReadingTestPage3 extends AppCompatActivity {
         Button btnPrev3 = findViewById(R.id.btnPrev3);
         imgView = findViewById(R.id.imgView);
         txtView = findViewById(R.id.qText);
-        RadioButton ansButton13 = findViewById(R.id.ansButton13);
-        RadioButton ansButton23 = findViewById(R.id.ansButton23);
-        RadioButton ansButton33 = findViewById(R.id.ansButton33);
-
-
+        ansButton13 = findViewById(R.id.ansButton13);
+        ansButton23 = findViewById(R.id.ansButton23);
+        ansButton33 = findViewById(R.id.ansButton33);
 
         ansGroup = findViewById(R.id.radioGroup);
         qNumber3 = findViewById(R.id.qNumber3);
-
-
 
         QModel3 question1 = new QModel3("a13031","____著眼鏡的小女孩在看書。","穿","帶","戴",'C');
         QModel3 question2 = new QModel3("a13031","她一邊看書，一邊____筷子吃麵。 ","帶","用","找",'B');
@@ -101,6 +100,8 @@ public class ReadingTestPage3 extends AppCompatActivity {
         groups.add(group2);
         Collections.shuffle(groups);
 
+
+
 // Concatenate the shuffled groups into randomQuestions
         randomQuestions = new ArrayList<>();
         for (List<QModel3> group : groups) {
@@ -116,11 +117,41 @@ public class ReadingTestPage3 extends AppCompatActivity {
         txtView.setText(randomQuestions.get(0).getqText());
         qNumber3.setText("第 1 題");
 
+
         QModel3 firstQuestion = randomQuestions.get(0);
 
         ansButton13.setText(firstQuestion.getAns1());
         ansButton23.setText(firstQuestion.getAns2());
         ansButton33.setText(firstQuestion.getAns3());
+
+        btnNext3.setOnClickListener(v -> {
+            if (!ansChecked) {
+                ansGroup.clearCheck();
+            }
+
+            if (index == lastIndex) {
+                Intent intent = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
+                intent.putExtra("totalPoint", totalPoint);
+                startActivity(intent);
+            } else {
+                index++;
+                txtView.setText(randomQuestions.get(index).getqText());
+                QModel3 currentQuestion = randomQuestions.get(index);
+                StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+                imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    Picasso.get().load(uri.toString()).into(imgView);
+                }).addOnFailureListener(exception -> {
+                    // Handle any errors that occurred during image download
+                    exception.printStackTrace();
+                });
+                ansChecked = false;
+                qNumber3.setText("第 " + (index + 1) + " 題");
+
+                ansButton13.setText(currentQuestion.getAns1());
+                ansButton23.setText(currentQuestion.getAns2());
+                ansButton33.setText(currentQuestion.getAns3());
+            }
+        });
 
         btnPrev3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,39 +183,9 @@ public class ReadingTestPage3 extends AppCompatActivity {
                     intent.putExtra("questionNumber", 15);
                     startActivity(intent);
                 }
-
             }
         });
 
-
-        btnNext3.setOnClickListener(v -> {
-            if (!ansChecked) {
-                ansGroup.clearCheck();
-            }
-
-            if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
-                intent.putExtra("totalPoint", totalPoint);
-                startActivity(intent);
-            } else {
-                index++;
-                txtView.setText(randomQuestions.get(index).getqText());
-                QModel3 currentQuestion = randomQuestions.get(index);
-                StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
-                imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Picasso.get().load(uri.toString()).into(imgView);
-                }).addOnFailureListener(exception -> {
-                    // Handle any errors that occurred during image download
-                    exception.printStackTrace();
-                });
-                ansChecked = false;
-                qNumber3.setText("第 " + (index + 1) + " 題");
-
-                ansButton13.setText(currentQuestion.getAns1());
-                ansButton23.setText(currentQuestion.getAns2());
-                ansButton33.setText(currentQuestion.getAns3());
-            }
-        });
 
         for (int i = 1; i <= 10; i++) {
             int questionNumber = i;
@@ -257,6 +258,14 @@ public class ReadingTestPage3 extends AppCompatActivity {
         if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
             index = questionIndex;
             qNumber3.setText("第 " + (index + 1) + " 題");
+
+            QModel3 currentQuestion = randomQuestions.get(index);
+
+            txtView.setText(randomQuestions.get(index).getqText());
+
+            ansButton13.setText(currentQuestion.getAns1());
+            ansButton23.setText(currentQuestion.getAns2());
+            ansButton33.setText(currentQuestion.getAns3());
 
             StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
             imgRef.getDownloadUrl().addOnSuccessListener(uri -> {

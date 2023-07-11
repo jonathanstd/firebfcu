@@ -38,6 +38,10 @@ public class ReadingTestPage2 extends AppCompatActivity {
     RadioGroup ansGroup;
     List<Character> selectedAnswers = new ArrayList<>();
 
+    RadioButton ansButton1;
+    RadioButton ansButton2;
+    RadioButton ansButton3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +54,16 @@ public class ReadingTestPage2 extends AppCompatActivity {
         Button btnNext2 = findViewById(R.id.btnNext2);
         Button btnPrev2 = findViewById(R.id.btnPrev2);
         imgView = findViewById(R.id.imgView);
-        RadioButton ansButton1 = findViewById(R.id.ansButton1);
-        RadioButton ansButton2 = findViewById(R.id.ansButton2);
-        RadioButton ansButton3 = findViewById(R.id.ansButton3);
 
+        ansButton1 = findViewById(R.id.ansButton1);
+        ansButton2 = findViewById(R.id.ansButton2);
+        ansButton3 = findViewById(R.id.ansButton3);
 
+        Intent intent = getIntent();
+        int receivedPoint = intent.getIntExtra("point", 0);
+
+        // Add the received point to the totalPoint
+        totalPoint += receivedPoint;
 
         ansGroup = findViewById(R.id.radioGroup);
         qNumber2 = findViewById(R.id.qNumber2);
@@ -110,6 +119,13 @@ public class ReadingTestPage2 extends AppCompatActivity {
         int lastIndexPage2 = randomQuestions.size() - 1;
 
         QModel2 firstQuestion = randomQuestions.get(0);
+        StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+        imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Picasso.get().load(uri.toString()).into(imgView);
+        }).addOnFailureListener(exception -> {
+            // Handle any errors that occurred during image download
+            exception.printStackTrace();
+        });
         ansButton1.setText(firstQuestion.getAns1());
         ansButton2.setText(firstQuestion.getAns2());
         ansButton3.setText(firstQuestion.getAns3());
@@ -195,7 +211,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
                 }
             });
             // Add the button to the LinearLayout
-            LinearLayout linearLayout = findViewById(R.id.buttonLayout);
+            LinearLayout linearLayout = findViewById(R.id.buttonLayout2);
             linearLayout.addView(button);
         }
 
@@ -256,7 +272,12 @@ public class ReadingTestPage2 extends AppCompatActivity {
             index = questionIndex;
             qNumber2.setText("第 " + (index + 1) + " 題");
 
-            StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+            QModel2 currentQuestion = randomQuestions.get(index);
+            ansButton1.setText(currentQuestion.getAns1());
+            ansButton2.setText(currentQuestion.getAns2());
+            ansButton3.setText(currentQuestion.getAns3());
+
+            StorageReference imgRef = storageReference.child(chapterPath + currentQuestion.getqImage() + ".jpg");
             imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 Picasso.get().load(uri.toString()).into(imgView);
             }).addOnFailureListener(exception -> {
@@ -270,5 +291,6 @@ public class ReadingTestPage2 extends AppCompatActivity {
             Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 }

@@ -16,10 +16,11 @@ public class TotalPointPage extends AppCompatActivity {
         setContentView(R.layout.activity_total_point_page);
         Intent intent = getIntent();
         int totalPoint = intent.getIntExtra("totalPoint", 0);
-        String convert = Integer.toString(totalPoint);
 
         TextView point = findViewById(R.id.finalPoint);
+        String convert = Integer.toString(totalPoint);
         point.setText(convert);
+
 
         Button home = findViewById(R.id.homeBtn);
 
@@ -30,5 +31,12 @@ public class TotalPointPage extends AppCompatActivity {
                 startActivity(new Intent(TotalPointPage.this, MainActivity.class));
             }
         });
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

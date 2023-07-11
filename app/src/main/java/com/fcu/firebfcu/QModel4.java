@@ -2,9 +2,9 @@ package com.fcu.firebfcu;
 
 public class QModel4 {
 
-    String qText1;
+    String questionChoice;
 
-    String qText2;
+    String questionTextPage4;
 
     String ans1;
 
@@ -43,9 +43,9 @@ public class QModel4 {
 
     char answer;
 
-    public QModel4(String qText1, String qText2, String ans1, String ans2, String ans3,String ans4, String ans5, String ans6, char answer) {
-        this.qText1 = qText1;
-        this.qText2 = qText2;
+    public QModel4(String questionChoice, String questionTextPage4, String ans1, String ans2, String ans3,String ans4, String ans5, String ans6, char answer) {
+        this.questionChoice = questionChoice;
+        this.questionTextPage4 = questionTextPage4;
         this.ans1 = ans1;
         this.ans2 = ans2;
         this.ans3 = ans3;
@@ -54,20 +54,20 @@ public class QModel4 {
         this.ans6 = ans6;
         this.answer = answer; }
 
-    public String getqText1() {
-        return qText1;
+    public String getquestionChoice() {
+        return questionChoice;
     }
 
-    public void setqText1(String qText1) {
-        this.qText1 = qText1;
+    public void setquestionChoice(String questionChoice) {
+        this.questionChoice = questionChoice;
     }
 
-    public String getqText2() {
-        return qText2;
+    public String getQuestionTextPage4() {
+        return questionTextPage4;
     }
 
-    public void setqText2(String qText2) {
-        this.qText2 = qText2;
+    public void setquestionTextPage4(String questionTextPage4) {
+        this.questionTextPage4 = questionTextPage4;
     }
 
     public String getAns1() {

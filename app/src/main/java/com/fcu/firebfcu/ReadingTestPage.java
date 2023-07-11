@@ -53,8 +53,6 @@ public class ReadingTestPage extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-
-
         Button btnNext1 = findViewById(R.id.btnNext1);
         Button btnPrev1 = findViewById(R.id.btnPrev1);
 
