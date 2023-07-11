@@ -14,13 +14,6 @@ public class TotalPointPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_point_page);
-        Intent intent = getIntent();
-        int totalPoint = intent.getIntExtra("totalPoint", 0);
-
-        TextView point = findViewById(R.id.finalPoint);
-        String convert = Integer.toString(totalPoint);
-        point.setText(convert);
-
 
         Button home = findViewById(R.id.homeBtn);
 

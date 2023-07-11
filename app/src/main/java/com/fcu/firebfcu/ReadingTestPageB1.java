@@ -182,19 +182,6 @@ public class ReadingTestPageB1 extends AppCompatActivity {
             }
         });
 
-        for (int i = 1; i <= 10; i++) {
-            int questionNumber = i;
-            Button button = new Button(this);
-            button.setText(String.valueOf(questionNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToQuestion(questionNumber);
-                }
-            });
-            // Add the button to the LinearLayout
-        }
-
         ansButtonPageB1_1.setOnClickListener(v -> {
             if (al.get(index).getAnswer() == 'A' && !ansChecked) {
                 totalPoint += 2;
@@ -259,20 +246,6 @@ public class ReadingTestPageB1 extends AppCompatActivity {
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
 
-    }
-    private void moveToQuestion(int questionNumber) {
-        // Calculate the index of the question based on the question number
-        int questionIndex = questionNumber - 1;
-
-        if (questionIndex >= 0 && questionIndex < al.size()) {
-            index = questionIndex;
-            qNumberPageB1.setText("第 " + (index + 1) + " 題");
-
-            ansChecked = false;
-        } else {
-            // Handle the case where the question number is out of range
-            Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
-        }
     }
 
 

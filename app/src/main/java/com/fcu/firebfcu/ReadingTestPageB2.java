@@ -7,21 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ReadingTestPageB2 extends AppCompatActivity {
@@ -165,43 +159,33 @@ public class ReadingTestPageB2 extends AppCompatActivity {
         });
 
 
-        btnNextPageB2.setOnClickListener(v -> {
-            if (!ansChecked) {
-                radioGroupPageB2.clearCheck();
-            }
+        btnNextPageB2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!ansChecked) {
+                    radioGroupPageB2.clearCheck();
+                }
 
-            if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPageB2.this, ReadingTestPageB2_2.class);
-                intent.putExtra("totalPoint", totalPoint);
-                startActivity(intent);
-            } else {
-                index++;
-                questionParagraphB2.setText(al.get(index).getQuestionParagraphB2());
-                questionTextPageB2.setText(al.get(index).getQuestionTextB2());
-                QModelB2 currentQuestion = al.get(index);
+                if (index == lastIndex) {
+                    Intent intent = new Intent(ReadingTestPageB2.this, ReadingTestPageB2ver2.class);
+                    intent.putExtra("totalPoint", totalPoint);
+                    startActivity(intent);
+                } else if (index < lastIndex) {
+                    index++;
+                    questionParagraphB2.setText(al.get(index).getQuestionParagraphB2());
+                    questionTextPageB2.setText(al.get(index).getQuestionTextB2());
+                    QModelB2 currentQuestion = al.get(index);
 
-                ansChecked = false;
-                qNumberPageB2.setText("第 " + (index + 1) + " 題");
+                    ansChecked = false;
+                    qNumberPageB2.setText("第 " + (index + 1) + " 題");
 
-                ansButtonPageB2_1.setText(firstQuestion.getChoice1());
-                ansButtonPageB2_2.setText(firstQuestion.getChoice2());
-                ansButtonPageB2_3.setText(firstQuestion.getChoice3());
-                ansButtonPageB2_4.setText(firstQuestion.getChoice4());
+                    ansButtonPageB2_1.setText(currentQuestion.getChoice1());
+                    ansButtonPageB2_2.setText(currentQuestion.getChoice2());
+                    ansButtonPageB2_3.setText(currentQuestion.getChoice3());
+                    ansButtonPageB2_4.setText(currentQuestion.getChoice4());
+                }
             }
         });
-
-        for (int i = 1; i <= 10; i++) {
-            int questionNumber = i;
-            Button button = new Button(this);
-            button.setText(String.valueOf(questionNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToQuestion(questionNumber);
-                }
-            });
-            // Add the button to the LinearLayout
-        }
 
         ansButtonPageB2_1.setOnClickListener(v -> {
             if (al.get(index).getAnswer() == 'A' && !ansChecked) {
@@ -267,20 +251,6 @@ public class ReadingTestPageB2 extends AppCompatActivity {
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
 
-    }
-    private void moveToQuestion(int questionNumber) {
-        // Calculate the index of the question based on the question number
-        int questionIndex = questionNumber - 1;
-
-        if (questionIndex >= 0 && questionIndex < al.size()) {
-            index = questionIndex;
-            qNumberPageB2.setText("第 " + (index + 1) + " 題");
-
-            ansChecked = false;
-        } else {
-            // Handle the case where the question number is out of range
-            Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
