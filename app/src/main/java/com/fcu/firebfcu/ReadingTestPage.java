@@ -42,8 +42,6 @@ public class ReadingTestPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reading_test_page);
 
-        scrollView = findViewById(R.id.scrollView);
-        buttonLayout = findViewById(R.id.buttonLayout);
         questionTextView = findViewById(R.id.questionTextView);
         qNumber = findViewById(R.id.qNumber);
         img1 = findViewById(R.id.img1);
@@ -55,6 +53,14 @@ public class ReadingTestPage extends AppCompatActivity {
 
         Button btnNext1 = findViewById(R.id.btnNext1);
         Button btnPrev1 = findViewById(R.id.btnPrev1);
+        Button toMenuPage = findViewById(R.id.toMenuPageA);
+
+        Intent intent = getIntent();
+        int questionNumber = intent.getIntExtra("questionNumber", -1);
+        if (questionNumber != -1) {
+            // Navigate to the specified question number
+            navigateToQuestion(questionNumber);
+        }
 
         QModel question1 = new QModel("桌子上放著三種水果。 ","a110011","a110012","a110013",'B');
         QModel question2 = new QModel("老王正畫著小天的臉。","a110021","a110022","a110023",'B');
@@ -153,11 +159,16 @@ public class ReadingTestPage extends AppCompatActivity {
             // Update the code according to your logic
         }
 
+        toMenuPage.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage.this, MenuPageA.class);
+            startActivity(menuPage);
+        });
+
         btnNext1.setOnClickListener(v -> {
             if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage.this, ReadingTestPage2.class);
+                Intent intentReadingTestPage2 = new Intent(ReadingTestPage.this, ReadingTestPage2.class);
                 intent.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
-                startActivity(intent);
+                startActivity(intentReadingTestPage2);
             } else {
                 index++;
                 questionTextView.setText(randomQuestions.get(index).getQuestion());
@@ -270,60 +281,21 @@ public class ReadingTestPage extends AppCompatActivity {
                 // Perform any other actions after the toast is dismissed
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
-
-        for (int i = 1; i <= 15; i++) {
-            int questionNumber = i;
-            Button button = new Button(this);
-            button.setText(String.valueOf(questionNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToQuestion(questionNumber);
-                }
-            });
-            // Add the button to the LinearLayout
-            LinearLayout linearLayout = findViewById(R.id.buttonLayout);
-            linearLayout.addView(button);
-        }
     }
 
-    private void moveToQuestion(int questionNumber) {
-        // Calculate the index of the question based on the question number
-        int questionIndex = questionNumber - 1;
-
-        if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
-            index = questionIndex;
-            qNumber.setText("第 " + (index + 1) + " 題");
+    private void navigateToQuestion(int questionNumber) {
+        if (questionNumber >= 1 && questionNumber <= randomQuestions.size()) {
+            index = questionNumber - 1;
             questionTextView.setText(randomQuestions.get(index).getQuestion());
 
-            StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getImage1() + ".jpg");
-            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                Picasso.get().load(uri.toString()).into(img1);
-            }).addOnFailureListener(exception -> {
-                // Handle any errors that occurred during image download
-                exception.printStackTrace();
-            });
-
-            StorageReference imgRef2 = storageReference.child(chapterPath + randomQuestions.get(index).getImage2() + ".jpg");
-            imgRef2.getDownloadUrl().addOnSuccessListener(uri -> {
-                Picasso.get().load(uri.toString()).into(img2);
-            }).addOnFailureListener(exception -> {
-                // Handle any errors that occurred during image download
-                exception.printStackTrace();
-            });
-
-            StorageReference imgRef3 = storageReference.child(chapterPath + randomQuestions.get(index).getImage3() + ".jpg");
-            imgRef3.getDownloadUrl().addOnSuccessListener(uri -> {
-                Picasso.get().load(uri.toString()).into(img3);
-            }).addOnFailureListener(exception -> {
-                // Handle any errors that occurred during image download
-                exception.printStackTrace();
-            });
+            // Load the images for the specified question (similar to the existing code)
+            // ...
 
             ansChecked = false;
+            qNumber.setText("第 " + questionNumber + " 題");
         } else {
-            // Handle the case where the question number is out of range
-            Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
+            // Handle the case when the question number is out of bounds
+            Toast.makeText(this, "Invalid question number", Toast.LENGTH_SHORT).show();
         }
     }
 

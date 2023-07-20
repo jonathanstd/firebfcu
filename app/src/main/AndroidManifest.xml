@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Firebfcu"
         tools:targetApi="31">
         <activity
+            android:name=".Chapter1"
+            android:exported="false" />
+        <activity
+            android:name=".MenuPageA"
+            android:exported="false" />
+        <activity
             android:name=".ReadingTestPageB2ver2"
             android:exported="false" />
         <activity
