@@ -54,8 +54,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        scrollView3 = findViewById(R.id.scrollView3);
-        buttonLayout3 = findViewById(R.id.buttonLayout3);
+        Button toMenuPage = findViewById(R.id.toMenuPageA);
         Button btnNext3 = findViewById(R.id.btnNext3);
         Button btnPrev3 = findViewById(R.id.btnPrev3);
         imgView = findViewById(R.id.imgView);
@@ -115,7 +114,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
         //String imagePath = al.get(index).getqImage();
 
         txtView.setText(randomQuestions.get(0).getqText());
-        qNumber3.setText("第 1 題");
+        qNumber3.setText("第 " + (index + 1) + " / 10 題");
 
 
         QModel3 firstQuestion = randomQuestions.get(0);
@@ -124,6 +123,21 @@ public class ReadingTestPage3 extends AppCompatActivity {
         ansButton23.setText(firstQuestion.getAns2());
         ansButton33.setText(firstQuestion.getAns3());
 
+        Intent intentPoint = getIntent();
+        int receivedPoint = intentPoint.getIntExtra("totalPoint", 0);
+        totalPoint += receivedPoint;
+
+        toMenuPage.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage3.this, MenuPageA.class);
+            startActivity(menuPage);
+        });
+
+        Button toMainAct = findViewById(R.id.toMainAct);
+        toMainAct.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage3.this, ReadingPage.class);
+            startActivity(menuPage);
+        });
+
         btnNext3.setOnClickListener(v -> {
             if (!ansChecked) {
                 ansGroup.clearCheck();
@@ -131,7 +145,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
 
             if (index == lastIndex) {
                 Intent intent = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
-                intent.putExtra("totalPoint", totalPoint);
+                intent.putExtra("totalPoint", totalPoint); // Pass the updated total points
                 startActivity(intent);
             } else {
                 index++;
@@ -145,7 +159,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
                     exception.printStackTrace();
                 });
                 ansChecked = false;
-                qNumber3.setText("第 " + (index + 1) + " 題");
+                qNumber3.setText("第 " + (index + 1) + " / 10 題");
 
                 ansButton13.setText(currentQuestion.getAns1());
                 ansButton23.setText(currentQuestion.getAns2());
@@ -172,7 +186,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
                         exception.printStackTrace();
                     });
                     ansChecked = false;
-                    qNumber3.setText("第 " + (index + 1) + " 題");
+                    qNumber3.setText("第 " + (index + 1) + " / 10 題");
 
                     ansButton13.setText(currentQuestion.getAns1());
                     ansButton23.setText(currentQuestion.getAns2());
@@ -185,22 +199,6 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 }
             }
         });
-
-
-        for (int i = 1; i <= 10; i++) {
-            int questionNumber = i;
-            Button button = new Button(this);
-            button.setText(String.valueOf(questionNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToQuestion(questionNumber);
-                }
-            });
-            // Add the button to the LinearLayout
-            LinearLayout linearLayout = findViewById(R.id.buttonLayout3);
-            linearLayout.addView(button);
-        }
 
         ansButton13.setOnClickListener(v -> {
             if (randomQuestions.get(index).getAnswer() == 'A' && !ansChecked) {
@@ -249,24 +247,19 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 // Perform any other actions after the toast is dismissed
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
-
+        Intent intent = getIntent();
+        int questionNumber = intent.getIntExtra("questionNumber", -1);
+        if (questionNumber != -1) {
+            // Navigate to the specified question number
+            navigateToQuestion(questionNumber);
+        }
     }
-    private void moveToQuestion(int questionNumber) {
-        // Calculate the index of the question based on the question number
-        int questionIndex = questionNumber - 1;
 
-        if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
-            index = questionIndex;
-            qNumber3.setText("第 " + (index + 1) + " 題");
-
-            QModel3 currentQuestion = randomQuestions.get(index);
-
+    private void navigateToQuestion(int questionNumber) {
+        if (questionNumber >= 1 && questionNumber <= randomQuestions.size()) {
+            index = questionNumber - 1;
             txtView.setText(randomQuestions.get(index).getqText());
-
-            ansButton13.setText(currentQuestion.getAns1());
-            ansButton23.setText(currentQuestion.getAns2());
-            ansButton33.setText(currentQuestion.getAns3());
-
+            QModel3 currentQuestion = randomQuestions.get(index);
             StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
             imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 Picasso.get().load(uri.toString()).into(imgView);
@@ -274,12 +267,64 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 // Handle any errors that occurred during image download
                 exception.printStackTrace();
             });
-
             ansChecked = false;
+            qNumber3.setText("第 " + (index + 1) + " / 10 題");
+
+            ansButton13.setText(currentQuestion.getAns1());
+            ansButton23.setText(currentQuestion.getAns2());
+            ansButton33.setText(currentQuestion.getAns3());
         } else {
-            // Handle the case where the question number is out of range
-            Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
+            // Handle the case when the question number is out of bounds
+            Toast.makeText(this, "Invalid question number", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void displayQuestion(int questionIndex) {
+        if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
+            txtView.setText(randomQuestions.get(index).getqText());
+            QModel3 currentQuestion = randomQuestions.get(index);
+            StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+            imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Picasso.get().load(uri.toString()).into(imgView);
+            }).addOnFailureListener(exception -> {
+                // Handle any errors that occurred during image download
+                exception.printStackTrace();
+            });
+            ansChecked = false;
+            qNumber3.setText("第 " + (index + 1) + " / 10 題");
+
+            ansButton13.setText(currentQuestion.getAns1());
+            ansButton23.setText(currentQuestion.getAns2());
+            ansButton33.setText(currentQuestion.getAns3());
+        } else {
+            // Handle the case when an invalid question index is passed
+            Toast.makeText(this, "Invalid question index", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleAnswerButtonClick(char selectedAnswer) {
+        if (randomQuestions.get(index).getAnswer() == selectedAnswer && !ansChecked) {
+            totalPoint += 2;
+            ansChecked = true;
+        }
+
+        // Display the selected answer (A, B, or C) in a toast message
+        Toast.makeText(getApplicationContext(), String.valueOf(selectedAnswer), Toast.LENGTH_SHORT).show();
+
+        // Delay the navigation to the next question for a short period (300 milliseconds) to show the toast message
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Navigate to the next question if not the last question
+            int lastIndex = randomQuestions.size() - 1;
+            if (index < lastIndex) {
+                index++;
+                displayQuestion(index);
+            } else {
+                // Navigate to the next activity when it's the last question
+                Intent intentReadingTestPage2 = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
+                intentReadingTestPage2.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
+                startActivity(intentReadingTestPage2);
+            }
+        }, 300);
+    }
 }

@@ -1,18 +1,18 @@
 package com.fcu.firebfcu;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Chapter1 extends AppCompatActivity {
+public class Chapter3 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chapter1);
-
+        setContentView(R.layout.activity_chapter3);
         Button btnNum1 = findViewById(R.id.toNum1);
         Button btnNum2 = findViewById(R.id.toNum2);
         Button btnNum3 = findViewById(R.id.toNum3);
@@ -23,11 +23,6 @@ public class Chapter1 extends AppCompatActivity {
         Button btnNum8 = findViewById(R.id.toNum8);
         Button btnNum9 = findViewById(R.id.toNum9);
         Button btnNum10 = findViewById(R.id.toNum10);
-        Button btnNum11 = findViewById(R.id.toNum11);
-        Button btnNum12 = findViewById(R.id.toNum12);
-        Button btnNum13 = findViewById(R.id.toNum13);
-        Button btnNum14 = findViewById(R.id.toNum14);
-        Button btnNum15 = findViewById(R.id.toNum15);
 
         btnNum1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,46 +93,11 @@ public class Chapter1 extends AppCompatActivity {
                 startReadingTestPageWithQuestionNumber(10);
             }
         });
-
-        btnNum11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReadingTestPageWithQuestionNumber(11);
-            }
-        });
-
-        btnNum12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReadingTestPageWithQuestionNumber(12);
-            }
-        });
-
-        btnNum13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReadingTestPageWithQuestionNumber(13);
-            }
-        });
-
-        btnNum14.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReadingTestPageWithQuestionNumber(14);
-            }
-        });
-
-        btnNum15.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReadingTestPageWithQuestionNumber(15);
-            }
-        });
     }
 
     public void startReadingTestPageWithQuestionNumber(int questionNumber) {
         // Start the ReadingTestPage activity and pass the question number as an extra
-        Intent intent = new Intent(this, ReadingTestPage.class);
+        Intent intent = new Intent(this, ReadingTestPage3.class);
         intent.putExtra("questionNumber", questionNumber);
         startActivity(intent);
     }

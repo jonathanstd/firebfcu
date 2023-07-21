@@ -14,6 +14,7 @@ public class TotalPointPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_point_page);
+
         Intent intent = getIntent();
         int totalPoint = intent.getIntExtra("totalPoint", 0);
 
@@ -23,9 +24,7 @@ public class TotalPointPage extends AppCompatActivity {
 
 
         Button home = findViewById(R.id.homeBtn);
-
         home.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TotalPointPage.this, MainActivity.class));

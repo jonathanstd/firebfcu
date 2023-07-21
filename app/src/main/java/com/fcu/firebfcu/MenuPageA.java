@@ -24,24 +24,24 @@ public class MenuPageA extends AppCompatActivity {
             startActivity(part1);
         });
 
-        /*toChapt2.setOnClickListener(v -> {
-            Intent part2 = new Intent(MenuPageA.this, Chapter1.class);
+        toChapt2.setOnClickListener(v -> {
+            Intent part2 = new Intent(MenuPageA.this, Chapter2.class);
             startActivity(part2);
         });
 
         toChapt3.setOnClickListener(v -> {
-            Intent part3 = new Intent(MenuPageA.this, Chapter1.class);
+            Intent part3 = new Intent(MenuPageA.this, Chapter3.class);
             startActivity(part3);
         });
 
         toChapt4.setOnClickListener(v -> {
-            Intent part4 = new Intent(MenuPageA.this, Chapter1.class);
+            Intent part4 = new Intent(MenuPageA.this, Chapter4.class);
             startActivity(part4);
         });
 
         toChapt5.setOnClickListener(v -> {
-            Intent part5 = new Intent(MenuPageA.this, Chapter1.class);
+            Intent part5 = new Intent(MenuPageA.this, Chapter5.class);
             startActivity(part5);
-        });*/
+        });
     }
 }

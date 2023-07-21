@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Chapter2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/toNum1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 1"
+                android:onClick="startReadingTestPageWithQuestionNumber" />
+
+            <Button
+                android:id="@+id/toNum2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 2" />
+
+            <Button
+                android:id="@+id/toNum3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 3" />
+
+            <Button
+                android:id="@+id/toNum4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 4" />
+
+            <Button
+                android:id="@+id/toNum5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/toNum6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 6" />
+
+            <Button
+                android:id="@+id/toNum7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 7" />
+
+            <Button
+                android:id="@+id/toNum8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 8" />
+
+            <Button
+                android:id="@+id/toNum9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 9" />
+
+            <Button
+                android:id="@+id/toNum10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/toNum11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 11" />
+
+            <Button
+                android:id="@+id/toNum12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 12" />
+
+            <Button
+                android:id="@+id/toNum13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 13" />
+
+            <Button
+                android:id="@+id/toNum14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 14" />
+
+            <Button
+                android:id="@+id/toNum15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number 15" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

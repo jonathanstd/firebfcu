@@ -54,13 +54,8 @@ public class ReadingTestPage extends AppCompatActivity {
         Button btnNext1 = findViewById(R.id.btnNext1);
         Button btnPrev1 = findViewById(R.id.btnPrev1);
         Button toMenuPage = findViewById(R.id.toMenuPageA);
+        Button toMainAct = findViewById(R.id.toMainAct);
 
-        Intent intent = getIntent();
-        int questionNumber = intent.getIntExtra("questionNumber", -1);
-        if (questionNumber != -1) {
-            // Navigate to the specified question number
-            navigateToQuestion(questionNumber);
-        }
 
         QModel question1 = new QModel("桌子上放著三種水果。 ","a110011","a110012","a110013",'B');
         QModel question2 = new QModel("老王正畫著小天的臉。","a110021","a110022","a110023",'B');
@@ -120,7 +115,7 @@ public class ReadingTestPage extends AppCompatActivity {
         Collections.shuffle(al);
 
         // Select the first 5 questions
-        randomQuestions = new ArrayList<>(al.subList(0, 15));
+        randomQuestions = new ArrayList<>(al.subList(0, 5));
         int lastIndex = randomQuestions.size() - 1;
 
         ArrayList<Button> questionButtons = new ArrayList<>();
@@ -150,7 +145,7 @@ public class ReadingTestPage extends AppCompatActivity {
         });
 
         questionTextView.setText(randomQuestions.get(0).getQuestion());
-        qNumber.setText("第 1 題");
+        qNumber.setText("第 1 / 15 題");
 
         Intent intentLast = getIntent();
         boolean isLastQuestion = intentLast.getBooleanExtra("lastQuestion", false);
@@ -164,11 +159,16 @@ public class ReadingTestPage extends AppCompatActivity {
             startActivity(menuPage);
         });
 
+        toMainAct.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage.this, ReadingPage.class);
+            startActivity(menuPage);
+        });
+
         btnNext1.setOnClickListener(v -> {
             if (index == lastIndex) {
-                Intent intentReadingTestPage2 = new Intent(ReadingTestPage.this, ReadingTestPage2.class);
-                intent.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
-                startActivity(intentReadingTestPage2);
+                Intent intent = new Intent(ReadingTestPage.this, ReadingTestPage2.class);
+                intent.putExtra("totalPoint", totalPoint); // Pass the current total points
+                startActivity(intent);
             } else {
                 index++;
                 questionTextView.setText(randomQuestions.get(index).getQuestion());
@@ -198,7 +198,7 @@ public class ReadingTestPage extends AppCompatActivity {
                 });
 
                 ansChecked = false;
-                qNumber.setText("第 " + (index + 1) + " 題");
+                qNumber.setText("第 " + (index + 1) + " / 15 題");
             }
         });
 
@@ -207,7 +207,7 @@ public class ReadingTestPage extends AppCompatActivity {
             public void onClick(View v) {
                 if (index > 0) {
                     index--;
-                    qNumber.setText("第 " + (index + 1) + " 題");
+                    qNumber.setText("第 " + (index + 1) + " / 15 題");
                     questionTextView.setText(randomQuestions.get(index).getQuestion());
 
                     StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getImage1() + ".jpg");
@@ -281,6 +281,13 @@ public class ReadingTestPage extends AppCompatActivity {
                 // Perform any other actions after the toast is dismissed
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
+
+        Intent intent = getIntent();
+        int questionNumber = intent.getIntExtra("questionNumber", -1);
+        if (questionNumber != -1) {
+            // Navigate to the specified question number
+            navigateToQuestion(questionNumber);
+        }
     }
 
     private void navigateToQuestion(int questionNumber) {
@@ -292,13 +299,52 @@ public class ReadingTestPage extends AppCompatActivity {
             // ...
 
             ansChecked = false;
-            qNumber.setText("第 " + questionNumber + " 題");
+            qNumber.setText("第 " + (index + 1) + " / 15 題");
         } else {
             // Handle the case when the question number is out of bounds
             Toast.makeText(this, "Invalid question number", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void displayQuestion(int questionIndex) {
+        if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
+            QModel question = randomQuestions.get(questionIndex);
+            questionTextView.setText(question.getQuestion());
 
+            // Load and display the images for the question (similar to your existing code)
+            // ...
 
+            ansChecked = false;
+            qNumber.setText("第 " + (index + 1) + " / 15 題");
+        } else {
+            // Handle the case when an invalid question index is passed
+            Toast.makeText(this, "Invalid question index", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleAnswerButtonClick(char selectedAnswer) {
+        if (randomQuestions.get(index).getAnswer() == selectedAnswer && !ansChecked) {
+            totalPoint += 2;
+            ansChecked = true;
+        }
+
+        // Display the selected answer (A, B, or C) in a toast message
+        Toast.makeText(getApplicationContext(), String.valueOf(selectedAnswer), Toast.LENGTH_SHORT).show();
+
+        // Delay the navigation to the next question for a short period (300 milliseconds) to show the toast message
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Navigate to the next question if not the last question
+            int lastIndex = randomQuestions.size() - 1;
+            if (index < lastIndex) {
+                index++;
+                displayQuestion(index);
+            } else {
+                // Navigate to the next activity when it's the last question
+                Intent intentReadingTestPage2 = new Intent(ReadingTestPage.this, ReadingTestPage2.class);
+                intentReadingTestPage2.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
+                startActivity(intentReadingTestPage2);
+            }
+        }, 300);
+    }
 }

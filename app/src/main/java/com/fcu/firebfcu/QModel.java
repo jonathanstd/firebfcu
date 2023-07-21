@@ -30,4 +30,19 @@ public class QModel {
     public char getAnswer() {
         return answer;
     }
+
+    public int getAnswerIndex() {
+        // Convert the character answer (A, B, or C) to the corresponding index (1, 2, or 3)
+        switch (answer) {
+            case 'A':
+                return 1;
+            case 'B':
+                return 2;
+            case 'C':
+                return 3;
+            default:
+                return -1; // Return -1 for an invalid answer (optional)
+        }
+    }
+
 }

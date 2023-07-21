@@ -57,8 +57,7 @@ public class ReadingTestPage5 extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        scrollViewPage5 = findViewById(R.id.scrollViewPage5);
-        buttonLayoutPage5 = findViewById(R.id.buttonLayoutPage5);
+        Button toMenuPage = findViewById(R.id.toMenuPageA);
         Button btnNextPage5 = findViewById(R.id.btnNextPage5);
         Button btnPrevPage5 = findViewById(R.id.btnPrevPage5);
         questionParagraph = findViewById(R.id.questionParagraph);
@@ -125,7 +124,7 @@ public class ReadingTestPage5 extends AppCompatActivity {
 
         questionParagraph.setText(al.get(0).getQuestionParagraph());
         questionTextPage5.setText(al.get(0).getQuestionTextPage5());
-        qNumberPage5.setText("第 1 題");
+        qNumberPage5.setText("第 1 / 5 題");
 
         QModel5 firstQuestion = al.get(0);
 
@@ -133,6 +132,21 @@ public class ReadingTestPage5 extends AppCompatActivity {
         ansButtonPage5_2.setText(firstQuestion.getAns2());
         ansButtonPage5_3.setText(firstQuestion.getAns3());
         ansButtonPage5_4.setText(firstQuestion.getAns4());
+
+        Intent intentPoint = getIntent();
+        int receivedPoint = intentPoint.getIntExtra("totalPoint", 0);
+        totalPoint += receivedPoint;
+
+        toMenuPage.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage5.this, MenuPageA.class);
+            startActivity(menuPage);
+        });
+
+        Button toMainAct = findViewById(R.id.toMainAct);
+        toMainAct.setOnClickListener(v -> {
+            Intent menuPage = new Intent(ReadingTestPage5.this, ReadingPage.class);
+            startActivity(menuPage);
+        });
 
 
         btnPrevPage5.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +162,7 @@ public class ReadingTestPage5 extends AppCompatActivity {
                     questionTextPage5.setText(al.get(index).getQuestionTextPage5());
                     QModel5 currentQuestion = al.get(index);
                     ansChecked = false;
-                    qNumberPage5.setText("第 " + (index + 1) + " 題");
+                    qNumberPage5.setText("第 " + (index + 1) + " / 5 題");
 
                     ansButtonPage5_1.setText(firstQuestion.getAns1());
                     ansButtonPage5_2.setText(firstQuestion.getAns2());
@@ -171,7 +185,7 @@ public class ReadingTestPage5 extends AppCompatActivity {
             }
 
             if (index == lastIndex) {
-                Intent intent = new Intent(ReadingTestPage5.this, ReadingTestPageB1.class);
+                Intent intent = new Intent(ReadingTestPage5.this, TotalPointPage.class);
                 intent.putExtra("totalPoint", totalPoint);
                 startActivity(intent);
             } else {
@@ -181,7 +195,7 @@ public class ReadingTestPage5 extends AppCompatActivity {
                 QModel5 currentQuestion = al.get(index);
 
                 ansChecked = false;
-                qNumberPage5.setText("第 " + (index + 1) + " 題");
+                qNumberPage5.setText("第 " + (index + 1) + " / 5 題");
 
                 ansButtonPage5_1.setText(firstQuestion.getAns1());
                 ansButtonPage5_2.setText(firstQuestion.getAns2());
@@ -189,21 +203,6 @@ public class ReadingTestPage5 extends AppCompatActivity {
                 ansButtonPage5_4.setText(firstQuestion.getAns4());
             }
         });
-
-        for (int i = 1; i <= 5; i++) {
-            int questionNumber = i;
-            Button button = new Button(this);
-            button.setText(String.valueOf(questionNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToQuestion(questionNumber);
-                }
-            });
-            // Add the button to the LinearLayout
-            LinearLayout linearLayout = findViewById(R.id.buttonLayoutPage5);
-            linearLayout.addView(button);
-        }
 
         ansButtonPage5_1.setOnClickListener(v -> {
             if (al.get(index).getAnswer() == 'A' && !ansChecked) {
@@ -268,29 +267,77 @@ public class ReadingTestPage5 extends AppCompatActivity {
                 // Perform any other actions after the toast is dismissed
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
-
-    }
-    private void moveToQuestion(int questionNumber) {
-        // Calculate the index of the question based on the question number
-        int questionIndex = questionNumber - 1;
-
-        if (questionIndex >= 0 && questionIndex < al.size()) {
-            index = questionIndex;
-            qNumberPage5.setText("第 " + (index + 1) + " 題");
-            QModel5 currentQuestion = al.get(index);
-
-            questionParagraph.setText(currentQuestion.getQuestionParagraph());
-            questionTextPage5.setText(currentQuestion.getQuestionTextPage5());
-            ansButtonPage5_1.setText(currentQuestion.getAns1());
-            ansButtonPage5_2.setText(currentQuestion.getAns2());
-            ansButtonPage5_3.setText(currentQuestion.getAns3());
-            ansButtonPage5_4.setText(currentQuestion.getAns3());
-
-            ansChecked = false;
-        } else {
-            // Handle the case where the question number is out of range
-            Toast.makeText(this, "Invalid question number!", Toast.LENGTH_SHORT).show();
+        Intent intent = getIntent();
+        int questionNumber = intent.getIntExtra("questionNumber", -1);
+        if (questionNumber != -1) {
+            // Navigate to the specified question number
+            navigateToQuestion(questionNumber);
         }
     }
 
+    private void navigateToQuestion(int questionNumber) {
+        if (questionNumber >= 1 && questionNumber <= al.size()) {
+            index = questionNumber - 1;
+            questionParagraph.setText(al.get(index).getQuestionParagraph());
+            questionTextPage5.setText(al.get(index).getQuestionTextPage5());
+            QModel5 firstQuestion = al.get(index);
+
+            ansChecked = false;
+            qNumberPage5.setText("第 " + (index + 1) + " / 5 題");
+
+            ansButtonPage5_1.setText(firstQuestion.getAns1());
+            ansButtonPage5_2.setText(firstQuestion.getAns2());
+            ansButtonPage5_3.setText(firstQuestion.getAns3());
+            ansButtonPage5_4.setText(firstQuestion.getAns4());
+        } else {
+            // Handle the case when the question number is out of bounds
+            Toast.makeText(this, "Invalid question number", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayQuestion(int questionIndex) {
+        if (questionIndex >= 0 && questionIndex < al.size()) {
+            QModel5 question = al.get(questionIndex);
+            questionParagraph.setText(al.get(index).getQuestionParagraph());
+            questionTextPage5.setText(al.get(index).getQuestionTextPage5());
+            QModel5 firstQuestion = al.get(index);
+
+            ansChecked = false;
+            qNumberPage5.setText("第 " + (index + 1) + " / 5 題");
+
+            ansButtonPage5_1.setText(firstQuestion.getAns1());
+            ansButtonPage5_2.setText(firstQuestion.getAns2());
+            ansButtonPage5_3.setText(firstQuestion.getAns3());
+            ansButtonPage5_4.setText(firstQuestion.getAns4());
+        } else {
+            // Handle the case when an invalid question index is passed
+            Toast.makeText(this, "Invalid question index", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleAnswerButtonClick(char selectedAnswer) {
+        if (al.get(index).getAnswer() == selectedAnswer && !ansChecked) {
+            totalPoint += 2;
+            ansChecked = true;
+        }
+
+        // Display the selected answer (A, B, or C) in a toast message
+        Toast.makeText(getApplicationContext(), String.valueOf(selectedAnswer), Toast.LENGTH_SHORT).show();
+
+        // Delay the navigation to the next question for a short period (300 milliseconds) to show the toast message
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Navigate to the next question if not the last question
+            int lastIndex = al.size() - 1;
+            if (index < lastIndex) {
+                index++;
+                displayQuestion(index);
+            } else {
+                // Navigate to the next activity when it's the last question
+                Intent intentReadingTestPage2 = new Intent(ReadingTestPage5.this, TotalPointPage.class);
+                intentReadingTestPage2.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
+                startActivity(intentReadingTestPage2);
+            }
+        }, 300);
+    }
 }

@@ -91,12 +91,12 @@
 
 
             <Button
-                android:id="@+id/menuButtonB2"
+                android:id="@+id/toMenuPageA"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="題目"
-                android:background="@drawable/circle"/>
+                android:background="@drawable/circle"
+                android:text="題目" />
 
         </LinearLayout>
     </LinearLayout>

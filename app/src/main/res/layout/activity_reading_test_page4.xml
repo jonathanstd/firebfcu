@@ -99,15 +99,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
 
             <Button
+                android:id="@+id/toMenuPageA"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="題目"
-                android:background="@drawable/circle"/>
+                android:background="@drawable/circle"
+                android:text="題目" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="第四部分"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/toMainAct"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle"
+                android:text="主頁" />
 
         </LinearLayout>
     </LinearLayout>

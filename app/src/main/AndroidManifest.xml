@@ -15,6 +15,18 @@
         android:theme="@style/Theme.Firebfcu"
         tools:targetApi="31">
         <activity
+            android:name=".Chapter5"
+            android:exported="false" />
+        <activity
+            android:name=".Chapter4"
+            android:exported="false" />
+        <activity
+            android:name=".Chapter3"
+            android:exported="false" />
+        <activity
+            android:name=".Chapter2"
+            android:exported="false" />
+        <activity
             android:name=".Chapter1"
             android:exported="false" />
         <activity
@@ -37,7 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".ReadingTestPage3"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_reading_test_page3" />
         <activity
             android:name=".ReadingTestPage2"
