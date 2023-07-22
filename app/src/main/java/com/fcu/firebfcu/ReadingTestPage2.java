@@ -3,8 +3,10 @@ package com.fcu.firebfcu;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
 
     int index = 0;
     int totalPoint = 0;
+    int totalCorrectPoints = 0;
     boolean ansChecked = false;
     private StorageReference storageReference;
     int chapterNumber = 1;
@@ -49,7 +52,6 @@ public class ReadingTestPage2 extends AppCompatActivity {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
-
 
         Button btnNext2 = findViewById(R.id.btnNext2);
         Button btnPrev2 = findViewById(R.id.btnPrev2);
@@ -114,7 +116,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
 
         Collections.shuffle(al);
         // Select the first 6 questions
-        randomQuestions = new ArrayList<>(al.subList(0, 5));
+        randomQuestions = new ArrayList<>(al.subList(0, 15));
         int lastIndexPage2 = randomQuestions.size() - 1;
 
         QModel2 firstQuestion = randomQuestions.get(0);
@@ -128,6 +130,23 @@ public class ReadingTestPage2 extends AppCompatActivity {
         ansButton1.setText(firstQuestion.getAns1());
         ansButton2.setText(firstQuestion.getAns2());
         ansButton3.setText(firstQuestion.getAns3());
+
+        totalPoint = 0;
+        SharedPreferences sharedPreferences = getSharedPreferences("ReadingTestPagePrefs", MODE_PRIVATE);
+        totalCorrectPoints = sharedPreferences.getInt("totalCorrectPoints", 0);
+        Button finish = findViewById(R.id.finish);
+        finish.setOnClickListener(v -> {
+            // Save the total correct points for this page in SharedPreferences
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("totalCorrectPoints", totalPoint);
+            editor.apply();
+
+            // Navigate to the TotalPointPage
+            Intent intent = new Intent(ReadingTestPage2.this, TotalPointPage.class);
+            startActivity(intent);
+        });
+
 
         //loadImage(al.get(index).getqImage());
 
@@ -147,6 +166,23 @@ public class ReadingTestPage2 extends AppCompatActivity {
             Intent menuPage = new Intent(ReadingTestPage2.this, ReadingPage.class);
             startActivity(menuPage);
         });
+
+        if (savedInstanceState != null) {
+            totalPoint = savedInstanceState.getInt("totalPoint", 0);
+
+            // Restore selected answers for each question
+            for (int i = 0; i < randomQuestions.size(); i++) {
+                char selectedAnswer = savedInstanceState.getChar("selectedAnswer_" + i, ' ');
+                randomQuestions.get(i).setSelectedAnswer(selectedAnswer);
+            }
+
+            // Update the UI with the restored question and answer
+            displayQuestion(index);
+        } else {
+            // If no saved state, display the first question
+            displayQuestion(0);
+        }
+
 
         btnPrev2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,6 +297,7 @@ public class ReadingTestPage2 extends AppCompatActivity {
                 // Perform any other actions after the toast is dismissed
             }, 300);  // Set a custom delay of 3000 milliseconds (3 seconds)
         });
+
         Intent intent = getIntent();
         int questionNumber = intent.getIntExtra("questionNumber", -1);
         if (questionNumber != -1) {
@@ -342,8 +379,9 @@ public class ReadingTestPage2 extends AppCompatActivity {
 
     private void displayQuestion(int questionIndex) {
         if (questionIndex >= 0 && questionIndex < randomQuestions.size()) {
+            index = questionIndex;
             QModel2 currentQuestion = randomQuestions.get(index);
-            StorageReference imgRef = storageReference.child(chapterPath + randomQuestions.get(index).getqImage() + ".jpg");
+            StorageReference imgRef = storageReference.child(chapterPath + currentQuestion.getqImage() + ".jpg");
             imgRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 Picasso.get().load(uri.toString()).into(imgView);
             }).addOnFailureListener(exception -> {
@@ -351,11 +389,27 @@ public class ReadingTestPage2 extends AppCompatActivity {
                 exception.printStackTrace();
             });
             ansChecked = false;
-            qNumber2.setText("第 " + (index + 1) + " / 15 題");
+            qNumber2.setText("第 " + (index + 1) + " / " + randomQuestions.size() + " 題");
 
             ansButton1.setText(currentQuestion.getAns1());
             ansButton2.setText(currentQuestion.getAns2());
             ansButton3.setText(currentQuestion.getAns3());
+
+            // Check the previously selected answer, if any
+            char selectedAnswer = currentQuestion.getSelectedAnswer();
+            if (selectedAnswer != ' ') {
+                switch (selectedAnswer) {
+                    case 'A':
+                        ansButton1.setChecked(true);
+                        break;
+                    case 'B':
+                        ansButton2.setChecked(true);
+                        break;
+                    case 'C':
+                        ansButton3.setChecked(true);
+                        break;
+                }
+            }
         } else {
             // Handle the case when an invalid question index is passed
             Toast.makeText(this, "Invalid question index", Toast.LENGTH_SHORT).show();
@@ -363,20 +417,8 @@ public class ReadingTestPage2 extends AppCompatActivity {
     }
 
     private void handleAnswerButtonClick(char selectedAnswer) {
-        if (ansGroup.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Please select an answer.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Save the selected answer in the selectedAnswers list
-        selectedAnswers.add(selectedAnswer);
-
-        // Check if the selected answer is correct and update the total points
-        QModel2 currentQuestion = randomQuestions.get(index);
-        if (!ansChecked) {
-            if (currentQuestion.getAnswer() == selectedAnswer) {
-                totalPoint += 2;
-            }
+        if (randomQuestions.get(index).getAnswer() == selectedAnswer && !ansChecked) {
+            totalPoint += 2; // Increment by 2 for each correct answer
             ansChecked = true;
         }
 
@@ -392,31 +434,32 @@ public class ReadingTestPage2 extends AppCompatActivity {
                 index++;
                 displayQuestion(index);
             } else {
-                // Navigate to the next activity when it's the last question
-                Intent intentReadingTestPage2 = new Intent(ReadingTestPage2.this, ReadingTestPage3.class);
-                intentReadingTestPage2.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage3
-                startActivity(intentReadingTestPage2);
+                // Save the total correct points in SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("ReadingTestPagePrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // Use a unique key for each question's points based on the question index (e.g., "question_1_points", "question_2_points", etc.)
+                String questionKey = "question_" + (index + 1) + "_points";
+                editor.putInt(questionKey, totalPoint);
+                editor.apply();
+
+                // Navigate to the TotalPointPage
+                Intent intent = new Intent(ReadingTestPage2.this, TotalPointPage.class);
+                startActivity(intent);
             }
         }, 300);
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putChar("selectedAnswer_" + index, selectedAnswers.get(index));
-        outState.putInt("totalPoint", totalPoint);
-    }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            char selectedAnswer = savedInstanceState.getChar("selectedAnswer_" + index, ' ');
-            if (selectedAnswer != ' ') {
-                selectedAnswers.set(index, selectedAnswer);
-                ansChecked = true;
-            }
-            totalPoint = savedInstanceState.getInt("totalPoint", 0);
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the totalPoint
+        outState.putInt("totalPoint", totalPoint);
+
+        // Save the selected answers for each question
+        for (int i = 0; i < randomQuestions.size(); i++) {
+            char selectedAnswer = randomQuestions.get(i).getSelectedAnswer();
+            outState.putChar("selectedAnswer_" + i, selectedAnswer);
         }
     }
-
-    }
+}

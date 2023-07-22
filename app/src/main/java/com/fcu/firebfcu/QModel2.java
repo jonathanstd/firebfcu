@@ -42,6 +42,7 @@ public class QModel2 {
         this.answer = answer;
     }
 
+
     public QModel2(String qImage, String ans1, String ans2, String ans3, char answer) {
         this.qImage = qImage; this.ans1 = ans1; this.ans2 = ans2; this.ans3 = ans3; this.answer = answer; }
 
@@ -56,5 +57,21 @@ String ans3;
 //String selectedAns;
 
 char answer;
+    private char selectedAnswer;
+
+    public QModel2(char selectedAnswer) {
+        // Initialize your fields
+        // ...
+        this.selectedAnswer = selectedAnswer;
+    }
+
+    public char getSelectedAnswer() {
+        return selectedAnswer;
+    }
+
+    public void setSelectedAnswer(char selectedAnswer) {
+        this.selectedAnswer = selectedAnswer;
+    }
+
 
 }

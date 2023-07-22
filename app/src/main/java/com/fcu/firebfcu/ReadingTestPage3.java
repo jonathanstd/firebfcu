@@ -3,6 +3,7 @@ package com.fcu.firebfcu;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -28,6 +29,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
 
     int index = 0;
     int totalPoint = 0;
+    int totalCorrectPoints = 0;
     boolean ansChecked = false;
     private StorageReference storageReference;
     int chapterNumber = 1;
@@ -123,6 +125,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
         ansButton23.setText(firstQuestion.getAns2());
         ansButton33.setText(firstQuestion.getAns3());
 
+
         Intent intentPoint = getIntent();
         int receivedPoint = intentPoint.getIntExtra("totalPoint", 0);
         totalPoint += receivedPoint;
@@ -136,6 +139,28 @@ public class ReadingTestPage3 extends AppCompatActivity {
         toMainAct.setOnClickListener(v -> {
             Intent menuPage = new Intent(ReadingTestPage3.this, ReadingPage.class);
             startActivity(menuPage);
+        });
+
+        totalPoint = 0;
+        SharedPreferences sharedPreferences = getSharedPreferences("ReadingTestPagePrefs", MODE_PRIVATE);
+        totalCorrectPoints = sharedPreferences.getInt("totalCorrectPoints", 0);
+        Button finish = findViewById(R.id.finish);
+        finish.setOnClickListener(v -> {
+            // Save the total correct points in SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("totalCorrectPoints", totalPoint);
+            editor.apply();
+
+            // Retrieve the total points earned from previous pages
+            int totalPointsFromPreviousPages = getIntent().getIntExtra("totalPoint", 0);
+
+            // Calculate the cumulative total points across all pages
+            int totalCorrectPoints = totalPointsFromPreviousPages + totalPoint;
+
+            // Navigate to the TotalPointPage and pass the cumulative total points as an extra
+            Intent intent = new Intent(ReadingTestPage3.this, TotalPointPage.class);
+            intent.putExtra("totalPoint", totalCorrectPoints);
+            startActivity(intent);
         });
 
         btnNext3.setOnClickListener(v -> {
@@ -199,6 +224,19 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 }
             }
         });
+
+        ansButton13.setOnClickListener(v -> {
+            handleAnswerButtonClick('A');
+        });
+
+        ansButton23.setOnClickListener(v -> {
+            handleAnswerButtonClick('B');
+        });
+
+        ansButton33.setOnClickListener(v -> {
+            handleAnswerButtonClick('C');
+        });
+
 
         ansButton13.setOnClickListener(v -> {
             if (randomQuestions.get(index).getAnswer() == 'A' && !ansChecked) {
@@ -304,7 +342,7 @@ public class ReadingTestPage3 extends AppCompatActivity {
 
     private void handleAnswerButtonClick(char selectedAnswer) {
         if (randomQuestions.get(index).getAnswer() == selectedAnswer && !ansChecked) {
-            totalPoint += 2;
+            totalPoint += 2; // Increment by 2 for each correct answer
             ansChecked = true;
         }
 
@@ -320,11 +358,17 @@ public class ReadingTestPage3 extends AppCompatActivity {
                 index++;
                 displayQuestion(index);
             } else {
-                // Navigate to the next activity when it's the last question
-                Intent intentReadingTestPage2 = new Intent(ReadingTestPage3.this, ReadingTestPage4.class);
-                intentReadingTestPage2.putExtra("totalPoint", totalPoint); // Pass the total points to ReadingTestPage2
-                startActivity(intentReadingTestPage2);
+                // Save the total correct points in SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("ReadingTestPagePrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("totalCorrectPoints", totalPoint);
+                editor.apply();
+
+                // Navigate to the TotalPointPage
+                Intent intent = new Intent(ReadingTestPage3.this, TotalPointPage.class);
+                startActivity(intent);
             }
         }, 300);
     }
+
 }
