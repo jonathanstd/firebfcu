@@ -190,8 +190,8 @@ public class ReadingTestPage5 extends AppCompatActivity {
                     ansButtonPage5_4.setText(firstQuestion.getAns4());
                 } else {
                     // Navigate to the last question in ReadingTestPage
-                    Intent intent = new Intent(ReadingTestPage5.this, TotalPointPage.class);
-                    intent.putExtra("questionNumber", 15);
+                    Intent intent = new Intent(ReadingTestPage5.this, ReadingTestPage4.class);
+                    intent.putExtra("questionNumber", 5);
                     startActivity(intent);
                 }
 

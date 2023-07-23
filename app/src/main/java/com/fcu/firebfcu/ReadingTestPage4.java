@@ -151,7 +151,7 @@ public class ReadingTestPage4 extends AppCompatActivity {
                 } else {
                     // Navigate to the last question in ReadingTestPage
                     Intent intent = new Intent(ReadingTestPage4.this, ReadingTestPage3.class);
-                    intent.putExtra("questionNumber", 15);
+                    intent.putExtra("questionNumber", 10);
                     startActivity(intent);
                 }
 
